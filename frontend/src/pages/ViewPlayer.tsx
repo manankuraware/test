@@ -35,6 +35,39 @@ const ViewPlayer = () => {
       alert("Failed to delete player");
     }
   };
+  const handleEditName = async (pid: number) => {
+    const inputElement = document.getElementById(
+      `name-input-${pid}`,
+    ) as HTMLInputElement;
+    const nameToSubmit = inputElement ? inputElement.value : "";
+
+    if (!nameToSubmit.trim()) {
+      alert("Please enter a new name before submitting.");
+      return;
+    }
+
+    try {
+      await axios.put(`http://localhost:4000/update-player`, {
+        pid: pid,
+        name: nameToSubmit,
+      });
+
+      setData(
+        data.map((player) =>
+          player.pid === pid ? { ...player, name: nameToSubmit } : player,
+        ),
+      );
+
+      if (inputElement) {
+        inputElement.value = "";
+      }
+
+      alert("Player name updated successfully!");
+    } catch (error) {
+      console.error("Error updating player name:", error);
+      alert("Failed to update player name");
+    }
+  };
   if (loading) return <div>Loading...</div>;
   return (
     <div>
@@ -63,6 +96,19 @@ const ViewPlayer = () => {
                 <td>{e.fities}</td>
                 <td>{e.Team}</td>
                 <td>
+                  <input
+                    type="text"
+                    placeholder="Edit name"
+                    className="input mr-4"
+                    id={`name-input-${e.pid}`}
+                  />
+                  <button
+                    className="btn btn-primary mr-4"
+                    onClick={() => handleEditName(e.pid)}
+                  >
+                    EditName
+                  </button>
+
                   <button
                     className="btn btn-error text-white"
                     onClick={() => handleDelete(e.pid)}

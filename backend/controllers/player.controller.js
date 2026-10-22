@@ -31,3 +31,15 @@ export const deletePlyer = async (req, res) => {
         res.send(error);
     }
 }
+
+export const updatePlayerName = async (req, res) => {
+    const { pid, name } = req.body;
+    const sql = 'UPDATE players SET name = ? WHERE pid = ?';
+    
+    try {
+        const data = await pool.query(sql, [name, pid]);
+        res.send(data[0]);
+    } catch (error) {
+        res.send(error);
+    }
+}
