@@ -20,6 +20,21 @@ const ViewPlayer = () => {
     };
     fetchPlayers();
   }, []);
+
+  const handleDelete = async (pid: number) => {
+    try {
+      await axios.delete(`http://localhost:4000/delete-player`, {
+        data: { pid: pid },
+      });
+
+      setData(data.filter((player) => player.pid !== pid));
+
+      alert("Player deleted successfully!");
+    } catch (error) {
+      console.error("Error deleting player:", error);
+      alert("Failed to delete player");
+    }
+  };
   if (loading) return <div>Loading...</div>;
   return (
     <div>
@@ -35,6 +50,7 @@ const ViewPlayer = () => {
               <th>Hundreds</th>
               <th>Fifties</th>
               <th>Team</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -46,6 +62,14 @@ const ViewPlayer = () => {
                 <td>{e.hundreds}</td>
                 <td>{e.fities}</td>
                 <td>{e.Team}</td>
+                <td>
+                  <button
+                    className="btn btn-error text-white"
+                    onClick={() => handleDelete(e.pid)}
+                  >
+                    Delete
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>
