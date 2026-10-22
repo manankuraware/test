@@ -1,0 +1,8 @@
+.navmenu a {
+    text-decoration: none;
+    display: inline-block;
+    color: black;
+    padding: 5px;
+    background: pink;
+    margin: 2px;
+}
